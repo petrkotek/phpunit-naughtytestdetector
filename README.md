@@ -4,6 +4,9 @@
 
 "Naughty test detector" for PHPUnit. Identifies tests leaving garbage after themselves.
 
+Many of us have been there - your integration test works in isolation, but breaks when running in a sequence of tests.
+This can be very difficult to troubleshoot, but luckily `phpunit-naughtytestdetector` is here to help.  
+
 ## Requirements
 
 - PHPUnit 4.8 or 5.6
@@ -17,14 +20,15 @@ NaughtyTestDetector is installable via [Composer](http://getcomposer.org) and sh
 
 ## Usage
 
-1. Enable with all defaults by adding the following to your test suite's `phpunit.xml` file:
+#### 1. Enable `NaughtyTestListener` by adding the following to your test suite's `phpunit.xml` file:
 
 ```xml
 <phpunit bootstrap="vendor/autoload.php">
-...
+    ...
     <listeners>
         <listener class="PetrKotek\NaughtyTestDetector\PHPUnit\Listeners\NaughtyTestListener">
             <arguments>
+                <!-- Class name of your own MetricFetcher -->
                 <string>MyProject\TestUtils\MyMetricFetcher</string>
                 <!-- Optional constructor arguments for the metric fetcher -->
                 <array>
@@ -38,7 +42,7 @@ NaughtyTestDetector is installable via [Composer](http://getcomposer.org) and sh
 </phpunit>
 ```
 
-2. Implement `MyProject\TestUtils\MyMetricFetcher` class, e.g.:
+#### 2. Implement the `MetricFetcher` interface, e.g.:
 ```php
 namespace MyProject\TestUtils\MyMetricFetcher;
 
@@ -67,9 +71,14 @@ class MyMetricFetcher implements MetricFetcher
 
 ```
 
-3. Now run your test suite as normal. If some of the tests leaves new records in the `my_table`, `NaughtyTestListener`
-outputs something like this:
+#### 3. Run your test suite as normal.
+
+`NaughtyTestListener` will fetch metrics before & after each TestSuite (aka "test class") and if there is a difference
+between before & after, it prints out like message like this:
 ```
-Integration\Model\Content\PagesTest is naughty!
+MyProject\Integration\MyNamespace\BadTest is naughty!
  - my_table: 0 -> 5 (+5)
 ```
+
+This means, that before the test, there was `0` records in the `my_table` and after executing all the tests, there were
+`5` records.
