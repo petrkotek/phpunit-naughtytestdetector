@@ -1,10 +1,12 @@
 # phpunit-naughtytestdetector
+[![Build Status](https://travis-ci.org/petrkotek/phpunit-naughtytestdetector.svg?branch=master)](https://travis-ci.org/petrkotek/phpunit-naughtytestdetector)
+
 "Naughty test detector" for PHPUnit. Identifies tests leaving garbage after themselves.
 
 ## Requirements
 
 - PHPUnit 4.8 or 5.6
-- Supported PHP versions: 5.3, 5.4, 5.5, 5.6 and PHP 7.0
+- Supported PHP versions: 5.6 and 7.0
 
 ## Installation
 
