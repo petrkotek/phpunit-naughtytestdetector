@@ -17,7 +17,7 @@ NaughtyTestDetector is installable via [Composer](http://getcomposer.org) and sh
 
 ## Usage
 
-Enable with all defaults by adding the following to your test suite's `phpunit.xml` file:
+1. Enable with all defaults by adding the following to your test suite's `phpunit.xml` file:
 
 ```xml
 <phpunit bootstrap="vendor/autoload.php">
@@ -38,4 +38,38 @@ Enable with all defaults by adding the following to your test suite's `phpunit.x
 </phpunit>
 ```
 
-Now run your test suite as normal.
+2. Implement `MyProject\TestUtils\MyMetricFetcher` class, e.g.:
+```php
+namespace MyProject\TestUtils\MyMetricFetcher;
+
+use PetrKotek\NaughtyTestDetector\MetricFetcher;
+
+class MyMetricFetcher implements MetricFetcher
+{
+    private $db;
+    
+    public function __construct()
+    {
+        $this->db = mysqli_connect("127.0.0.1", "my_user", "my_password", "my_db");
+    }
+
+    /**
+     * @return array
+     */
+    public function fetchMetrics()
+    {
+        $result = mysqli_query($this->db, 'SELECT COUNT * FROM my_table');
+        $row = mysqli_fetch_row($result);
+        
+        return ['records' => $row[0];
+    }
+}
+
+```
+
+3. Now run your test suite as normal. If some of the tests leaves new records in the `my_table`, `NaughtyTestListener`
+outputs something like this:
+```
+Integration\Model\Content\PagesTest is naughty!
+ - my_table: 0 -> 5 (+5)
+```
