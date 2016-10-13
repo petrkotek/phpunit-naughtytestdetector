@@ -1,5 +1,6 @@
 # phpunit-naughtytestdetector
 [![Build Status](https://travis-ci.org/petrkotek/phpunit-naughtytestdetector.svg?branch=master)](https://travis-ci.org/petrkotek/phpunit-naughtytestdetector)
+[![Coverage Status](https://coveralls.io/repos/github/petrkotek/phpunit-naughtytestdetector/badge.svg?branch=master)](https://coveralls.io/github/petrkotek/phpunit-naughtytestdetector?branch=master)
 
 "Naughty test detector" for PHPUnit. Identifies tests leaving garbage after themselves.
 
