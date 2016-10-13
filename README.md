@@ -23,16 +23,17 @@ Enable with all defaults by adding the following to your test suite's `phpunit.x
 <phpunit bootstrap="vendor/autoload.php">
 ...
     <listeners>
-        <listener class="PetrKotek\PHPUnit\Listeners\NaughtyTestListener" />
-        <arguments>
-            <string>MyProject\TestUtils\MyMetricFetcher</string>
-            <!-- Optional constructor arguments for the metric fetcher -->
-            <array>
-                <element>
-                    <string>hello world</string>
-                </element>
-            </array>
-        </arguments>
+        <listener class="PetrKotek\NaughtyTestDetector\PHPUnit\Listeners\NaughtyTestListener">
+            <arguments>
+                <string>MyProject\TestUtils\MyMetricFetcher</string>
+                <!-- Optional constructor arguments for the metric fetcher -->
+                <array>
+                    <element>
+                        <string>hello world</string>
+                    </element>
+                </array>
+            </arguments>
+        </listener>
     </listeners>
 </phpunit>
 ```
