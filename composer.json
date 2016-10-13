@@ -1,0 +1,25 @@
+{
+    "name": "petrkotek/phpunit-naughtytestdetector",
+    "description": "\"Naughty test detector\" for PHPUnit. Identifies tests, which don't clean after themselves.",
+    "keywords": ["PHPUnit", "messy", "naughty", "cleaning", "cleanup", "erratic", "flaky", "detector"],
+    "type": "library",
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "Petr Kotek",
+            "email": "kotekp@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "PetrKotek\\NaughtyTestDetector\\": "src/",
+            "PetrKotek\\NaughtyTestDetector\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "~5.3 || ^7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.8"
+    }
+}
