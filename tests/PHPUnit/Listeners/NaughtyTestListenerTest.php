@@ -11,9 +11,7 @@ class NaughtyTestListenerTest extends TestCase
     public function testOneTestSuiteNoChange()
     {
         $testSuite = $this->createTestSuiteMock('DummyTestSuite');
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\StableFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\StableFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite);
@@ -26,9 +24,7 @@ class NaughtyTestListenerTest extends TestCase
     public function testOneTestSuiteWithChange()
     {
         $testSuite = $this->createTestSuiteMock('DummyTestSuite');
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\CountingFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\CountingFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite);
@@ -44,9 +40,7 @@ class NaughtyTestListenerTest extends TestCase
     public function testOneTestSuiteWithMultipleChanges()
     {
         $testSuite = $this->createTestSuiteMock('DummyTestSuite');
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\MultiCountingFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\MultiCountingFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite);
@@ -63,9 +57,7 @@ class NaughtyTestListenerTest extends TestCase
     public function testOneTestSuiteWithVaryingMetrics()
     {
         $testSuite = $this->createTestSuiteMock('DummyTestSuite');
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\VaryingMetricFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\VaryingMetricFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite);
@@ -83,9 +75,7 @@ class NaughtyTestListenerTest extends TestCase
     {
         $testSuite1 = $this->createTestSuiteMock('DummyTestSuite1');
         $testSuite2 = $this->createTestSuiteMock('DummyTestSuite2');
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\StableFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\StableFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite1);
@@ -102,9 +92,7 @@ class NaughtyTestListenerTest extends TestCase
         $testSuite1 = $this->createTestSuiteMock('DummyTestSuite1');
         $testSuite2 = $this->createTestSuiteMock('DummyTestSuite2');
 
-        $testListener = new NaughtyTestListener([
-            'metricFetcherClass' => Dummy\CountingFetcher::class,
-        ]);
+        $testListener = new NaughtyTestListener(Dummy\CountingFetcher::class);
 
         $this->startOutputCapture();
         $testListener->startTestSuite($testSuite1);
