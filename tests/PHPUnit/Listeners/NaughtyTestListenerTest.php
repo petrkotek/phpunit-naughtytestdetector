@@ -8,6 +8,19 @@ use PHPUnit_Framework_TestSuite as TestSuite;
 
 class NaughtyTestListenerTest extends TestCase
 {
+    public function testNoMetricFetcherConfigured()
+    {
+        $testSuite = $this->createTestSuiteMock('DummyTestSuite');
+        $testListener = new NaughtyTestListener();
+
+        $this->startOutputCapture();
+        $testListener->startTestSuite($testSuite);
+        $testListener->endTestSuite($testSuite);
+        $output = $this->finishOutputCapture();
+
+        static::assertSame('', $output);
+    }
+
     public function testOneTestSuiteNoChange()
     {
         $testSuite = $this->createTestSuiteMock('DummyTestSuite');

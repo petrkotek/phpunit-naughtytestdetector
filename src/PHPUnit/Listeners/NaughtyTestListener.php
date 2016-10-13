@@ -23,7 +23,7 @@ class NaughtyTestListener extends BaseTestListener
      * @param string $metricFetcherClass
      * @param array $constructorArgs
      */
-    public function __construct($metricFetcherClass, array $constructorArgs = [])
+    public function __construct($metricFetcherClass = null, array $constructorArgs = [])
     {
         if ($metricFetcherClass !== null) {
             $this->metricFetcher = new $metricFetcherClass(...$constructorArgs);
