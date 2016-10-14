@@ -167,6 +167,7 @@ class NaughtyTestListener extends BaseTestListener
         if ($this->metricFetcher === null) {
             return [];
         }
+
         return $this->metricFetcher->fetchMetrics();
     }
 
@@ -178,6 +179,7 @@ class NaughtyTestListener extends BaseTestListener
     /**
      * @param array $metricsBefore
      * @param array $metricsAfter
+     *
      * @return array
      */
     private function evaluateModifications(array $metricsBefore, array $metricsAfter)

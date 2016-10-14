@@ -2,7 +2,6 @@
 namespace PetrKotek\NaughtyTestDetector\Tests\PHPUnit\Listeners;
 
 use PetrKotek\NaughtyTestDetector\PHPUnit\Listeners\NaughtyTestListener;
-use PetrKotek\NaughtyTestDetector\Tests\PHPUnit\Listeners\Dummy;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use PHPUnit_Framework_TestCase as TestCase;
 use PHPUnit_Framework_TestListener as TestListener;
@@ -156,7 +155,6 @@ class NaughtyTestListenerTest extends TestCase
         $this->runTestSuites($testListener, [1, 2]);
         $output = $this->finishOutputCapture();
 
-
         $this->assertSameLines([
             'Test DummyTestSuite1::testFoo1 is naughty!',
             ' - counter: 0 -> 1 (+1)',
@@ -188,7 +186,6 @@ class NaughtyTestListenerTest extends TestCase
         $this->runTestSuites($testListener, [1, 1]);
         $output = $this->finishOutputCapture();
 
-
         $this->assertSameLines([
             'Test DummyTestSuite1::testFoo1 is naughty!',
             ' - counter: 0 -> 1 (+1)',
@@ -214,11 +211,13 @@ class NaughtyTestListenerTest extends TestCase
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
+
         return $mock;
     }
 
     /**
      * @param string $name
+     *
      * @return MockObject|TestCase
      */
     private function createTestCaseMock($name)
@@ -227,6 +226,7 @@ class NaughtyTestListenerTest extends TestCase
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
+
         return $mock;
     }
 
