@@ -36,6 +36,19 @@ NaughtyTestDetector is installable via [Composer](http://getcomposer.org) and sh
                         <string>hello world</string>
                     </element>
                 </array>
+                <!-- Optionally specify levels on which MetricFetcher should be executed -->
+                <!-- Note: values below are the default ones -->
+                <array>
+                    <element key="executeOnTestLevel">
+                        <boolean>false</boolean>
+                    </element>
+                    <element key="executeOnTestSuiteLevel">
+                        <boolean>true</boolean>
+                    </element>                
+                    <element key="executeOnGlobalLevel">
+                        <boolean>false</boolean>
+                    </element>
+                </array>
             </arguments>
         </listener>
     </listeners>
