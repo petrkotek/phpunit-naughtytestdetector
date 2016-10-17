@@ -205,6 +205,27 @@ class NaughtyTestListenerTest extends TestCase
         ], $output);
     }
 
+    public function testDisabledByEnv()
+    {
+        // setup env
+        putenv('DISABLE_NAUGHTY_TEST_DETECTOR=1');
+
+        $testListener = new NaughtyTestListener('NonExistingClassName', [], [
+            NaughtyTestListener::CONFIG_KEY_LEVEL_GLOBAL => true,
+            NaughtyTestListener::CONFIG_KEY_LEVEL_SUITE => true,
+            NaughtyTestListener::CONFIG_KEY_LEVEL_TEST => true,
+        ]);
+
+        $this->startOutputCapture();
+        $this->runTestSuites($testListener, [1, 1]);
+        $output = $this->finishOutputCapture();
+
+        static::assertSame('', $output);
+
+        // revert env
+        putenv('DISABLE_NAUGHTY_TEST_DETECTOR=');
+    }
+
     private function createTestSuiteMock($name)
     {
         $mock = $this->getMock(TestSuite::class);

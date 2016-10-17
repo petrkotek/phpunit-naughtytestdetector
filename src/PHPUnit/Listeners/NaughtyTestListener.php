@@ -21,6 +21,8 @@ class NaughtyTestListener extends BaseTestListener
     /** @var string Config key enabling execution of MetricFetcher before & after running all tests (bool) */
     const CONFIG_KEY_LEVEL_GLOBAL = 'executeOnGlobalLevel';
 
+    const DISABLE_ENV_KEY = 'DISABLE_NAUGHTY_TEST_DETECTOR';
+
     private $defaultOptions = [
         self::CONFIG_KEY_LEVEL_TEST => false,
         self::CONFIG_KEY_LEVEL_SUITE => true,
@@ -60,7 +62,8 @@ class NaughtyTestListener extends BaseTestListener
         array $constructorArgs = [],
         array $options = []
     ) {
-        if ($metricFetcherClass !== null) {
+        $disabledByEnv = in_array(getenv(self::DISABLE_ENV_KEY), ['1', 'true', 'TRUE'], true);
+        if (!$disabledByEnv && $metricFetcherClass !== null) {
             $this->metricFetcher = new $metricFetcherClass(...$constructorArgs);
         }
         $this->flags = array_merge($this->defaultOptions, $options);
