@@ -40,7 +40,7 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
         ], $output);
     }
@@ -54,7 +54,7 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per MultiCountingFetcher)!',
             ' - counter1: 0 -> 1 (+1)',
             ' - counter2: 0 -> 2 (+2)',
         ], $output);
@@ -69,7 +69,7 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per VaryingMetricFetcher)!',
             ' - counter0: 42 -> n/a',
             ' - counter1: n/a -> 42',
         ], $output);
@@ -95,10 +95,10 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
-            'TestSuite DummyTestSuite2 is naughty!',
+            'TestSuite DummyTestSuite2 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 2 (+1)',
         ], $output);
     }
@@ -115,7 +115,7 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'Global TestSuite is naughty!',
+            'Global TestSuite is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
         ], $output);
     }
@@ -132,14 +132,14 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'Test DummyTestSuite1::testFoo1 is naughty!',
+            'Test DummyTestSuite1::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
 
-            'Test DummyTestSuite1::testFoo2 is naughty!',
+            'Test DummyTestSuite1::testFoo2 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 2 (+1)',
             '',
-            'Test DummyTestSuite2::testFoo1 is naughty!',
+            'Test DummyTestSuite2::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 2 -> 3 (+1)',
         ], $output);
     }
@@ -156,20 +156,20 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'Test DummyTestSuite1::testFoo1 is naughty!',
+            'Test DummyTestSuite1::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
 
-            'Test DummyTestSuite2::testFoo1 is naughty!',
+            'Test DummyTestSuite2::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 2 (+1)',
             '',
-            'Test DummyTestSuite2::testFoo2 is naughty!',
+            'Test DummyTestSuite2::testFoo2 is naughty (as per CountingFetcher)!',
             ' - counter: 2 -> 3 (+1)',
             '',
-            'TestSuite DummyTestSuite2 is naughty!',
+            'TestSuite DummyTestSuite2 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 3 (+2)',
         ], $output);
     }
@@ -187,20 +187,20 @@ class NaughtyTestListenerTest extends TestCase
         $output = $this->finishOutputCapture();
 
         $this->assertSameLines([
-            'Test DummyTestSuite1::testFoo1 is naughty!',
+            'Test DummyTestSuite1::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
-            'TestSuite DummyTestSuite1 is naughty!',
+            'TestSuite DummyTestSuite1 is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 1 (+1)',
             '',
 
-            'Test DummyTestSuite2::testFoo1 is naughty!',
+            'Test DummyTestSuite2::testFoo1 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 2 (+1)',
             '',
-            'TestSuite DummyTestSuite2 is naughty!',
+            'TestSuite DummyTestSuite2 is naughty (as per CountingFetcher)!',
             ' - counter: 1 -> 2 (+1)',
             '',
-            'Global TestSuite is naughty!',
+            'Global TestSuite is naughty (as per CountingFetcher)!',
             ' - counter: 0 -> 2 (+2)',
         ], $output);
     }
@@ -226,9 +226,51 @@ class NaughtyTestListenerTest extends TestCase
         putenv('DISABLE_NAUGHTY_TEST_DETECTOR=');
     }
 
+    public function testLongStringOutput()
+    {
+        $testListener = new NaughtyTestListener(Dummy\LongStringFetcher::class);
+
+        $this->startOutputCapture();
+        $this->runTestSuites($testListener, [1]);
+        $output = $this->finishOutputCapture();
+
+        $this->assertSameLines([
+            'TestSuite DummyTestSuite1 is naughty (as per LongStringFetcher)!',
+            ' - counter: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa... -> aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa...',
+        ], $output);
+    }
+
+    public function testJsonEncodedOutput()
+    {
+        $testListener = new NaughtyTestListener(Dummy\ArrayCounterFetcher::class);
+
+        $this->startOutputCapture();
+        $this->runTestSuites($testListener, [1]);
+        $output = $this->finishOutputCapture();
+
+        $this->assertSameLines([
+            'TestSuite DummyTestSuite1 is naughty (as per ArrayCounterFetcher)!',
+            ' - counter: [0] -> [1]',
+        ], $output);
+    }
+
+    public function testNonserializableObjectOutput()
+    {
+        $testListener = new NaughtyTestListener(Dummy\NonserializableObjectFetcher::class);
+
+        $this->startOutputCapture();
+        $this->runTestSuites($testListener, [1]);
+        $output = $this->finishOutputCapture();
+
+        $this->assertSameLines([
+            'TestSuite DummyTestSuite1 is naughty (as per NonserializableObjectFetcher)!',
+            ' - counter: Object<stdClass> -> Object<stdClass>',
+        ], $output);
+    }
+
     private function createTestSuiteMock($name)
     {
-        $mock = $this->getMock(TestSuite::class);
+        $mock = $this->createMock(TestSuite::class);
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
@@ -243,7 +285,7 @@ class NaughtyTestListenerTest extends TestCase
      */
     private function createTestCaseMock($name)
     {
-        $mock = $this->getMock(TestCase::class);
+        $mock = $this->createMock(TestCase::class);
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
