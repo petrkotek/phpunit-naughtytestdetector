@@ -1,6 +1,7 @@
 <?php
 namespace PetrKotek\NaughtyTestDetector\PHPUnit\Listeners;
 
+use Exception;
 use PetrKotek\NaughtyTestDetector\MetricFetcher;
 use PHPUnit_Framework_BaseTestListener as BaseTestListener;
 use PHPUnit_Framework_Test as Test;
@@ -51,6 +52,9 @@ class NaughtyTestListener extends BaseTestListener
 
     /** @var array */
     private $flags;
+
+    /** @var int */
+    private $maxValueLength = 50;
 
     /**
      * @param string $metricFetcherClass
@@ -155,7 +159,9 @@ class NaughtyTestListener extends BaseTestListener
      */
     private function printNaughtyTest($name, array $modifications)
     {
-        echo PHP_EOL . "$name is naughty!";
+        $metricFetcherClassWithNamespace = get_class($this->metricFetcher);
+        $metricFetcherClass = substr($metricFetcherClassWithNamespace, strrpos($metricFetcherClassWithNamespace, '\\') + 1);
+        echo PHP_EOL . "$name is naughty (as per $metricFetcherClass)!";
         foreach ($modifications as $metric => $diffString) {
             echo PHP_EOL . " - $metric: $diffString";
         }
@@ -176,7 +182,27 @@ class NaughtyTestListener extends BaseTestListener
 
     private function formatValue($value)
     {
-        return $value !== null ? $value : 'n/a';
+        if ($value === null) {
+            return 'n/a';
+        }
+
+        $encoded = $value;
+        if (!is_scalar($value)) {
+            try {
+                $encoded = json_encode($value, true);
+                if (json_last_error() !== 0) {
+                    $encoded = sprintf('Object<%s>', get_class($value));
+                }
+            } catch (Exception $exception) {
+                $encoded = sprintf('Object<%s>', get_class($value));
+            }
+        }
+
+        if (mb_strlen($encoded) < $this->maxValueLength) {
+            return $encoded;
+        }
+
+        return substr($encoded, 0, $this->maxValueLength) . '...';
     }
 
     /**
@@ -194,7 +220,6 @@ class NaughtyTestListener extends BaseTestListener
             $currentValue = array_key_exists($metric, $metricsAfter) ? $metricsAfter[$metric] : null;
             if ($currentValue !== $previousValue) {
                 $diffString = '';
-                $currentValue = $this->formatValue($currentValue);
                 if (is_numeric($previousValue) && is_numeric($currentValue)) {
                     $diffNum = $currentValue - $previousValue;
                     $diffString = sprintf(' (%s%d)', $diffNum > 0 ? '+' : '-', abs($diffNum));
