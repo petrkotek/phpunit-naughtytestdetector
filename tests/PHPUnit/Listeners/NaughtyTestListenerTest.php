@@ -270,7 +270,7 @@ class NaughtyTestListenerTest extends TestCase
 
     private function createTestSuiteMock($name)
     {
-        $mock = $this->getMock(TestSuite::class);
+        $mock = $this->createMock(TestSuite::class);
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
@@ -285,7 +285,7 @@ class NaughtyTestListenerTest extends TestCase
      */
     private function createTestCaseMock($name)
     {
-        $mock = $this->getMock(TestCase::class);
+        $mock = $this->createMock(TestCase::class);
         $mock->expects(static::any())
             ->method('getName')
             ->willReturn($name);
