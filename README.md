@@ -84,7 +84,9 @@ class MyMetricFetcher implements MetricFetcher
 
 ```
 
-#### 3. Run your test suite as normal.
+#### 3. Run your test suite.
+
+E.g. `phpunit --configuration integration.xml`
 
 `NaughtyTestListener` will fetch metrics before & after each TestSuite (aka "test class") and if there is a difference
 between before & after, it prints out like message like this:
@@ -95,3 +97,5 @@ MyProject\Integration\MyNamespace\BadTest is naughty!
 
 This means, that before the test, there was `0` records in the `my_table` and after executing all the tests, there were
 `5` records.
+
+Note: If you want to temporarily disable Naughty Test Detector, use `DISABLE_NAUGHTY_TEST_DETECTOR` enviromental variable, e.g. `DISABLE_NAUGHTY_TEST_DETECTOR=1 phpunit --configuration integration.xml`.
