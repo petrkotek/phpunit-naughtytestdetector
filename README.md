@@ -10,7 +10,7 @@ This can be very difficult to troubleshoot, but luckily `phpunit-naughtytestdete
 ## Requirements
 
 - PHPUnit 4.8 or 5.6
-- Supported PHP versions: 5.6 and 7.0
+- Supported PHP versions: 5.6, 7.0 and 7.1
 
 ## Installation
 
