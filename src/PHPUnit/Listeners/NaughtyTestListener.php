@@ -56,6 +56,8 @@ class NaughtyTestListener extends BaseTestListener
     /** @var int */
     private $maxValueLength = 50;
 
+    private $messages = [];
+
     /**
      * @param string $metricFetcherClass
      * @param array $constructorArgs
@@ -79,7 +81,9 @@ class NaughtyTestListener extends BaseTestListener
     public function startTestSuite(TestSuite $suite)
     {
         if ($this->testSuiteCounter === 0 &&
-            ($this->isLevelEnabled(self::CONFIG_KEY_LEVEL_SUITE) || $this->isLevelEnabled(self::CONFIG_KEY_LEVEL_GLOBAL))
+            ($this->isLevelEnabled(self::CONFIG_KEY_LEVEL_SUITE) || $this->isLevelEnabled(
+                    self::CONFIG_KEY_LEVEL_GLOBAL
+                ))
         ) {
             $currentMetrics = $this->fetchMetrics();
             $this->metricsBeforeGlobalTestSuite = $currentMetrics;
@@ -104,7 +108,7 @@ class NaughtyTestListener extends BaseTestListener
             $modifications = $this->evaluateModifications($this->metricsBeforeTestSuite, $currentMetrics);
 
             if (count($modifications) > 0) {
-                $this->printNaughtyTest('TestSuite ' . $suite->getName(), $modifications);
+                $this->addNaughtyTest('TestSuite ' . $suite->getName(), $modifications);
             }
 
             $this->metricsBeforeTestSuite = $currentMetrics;
@@ -116,8 +120,13 @@ class NaughtyTestListener extends BaseTestListener
             $modifications = $this->evaluateModifications($this->metricsBeforeGlobalTestSuite, $currentMetrics);
 
             if (count($modifications) > 0) {
-                $this->printNaughtyTest('Global TestSuite', $modifications);
+                $this->addNaughtyTest('Global TestSuite', $modifications);
             }
+        }
+
+        if ($this->testSuiteCounter === 0 && count($this->messages) > 0) {
+            echo PHP_EOL . implode(PHP_EOL, $this->messages);
+            $this->messages = [];
         }
     }
 
@@ -146,7 +155,7 @@ class NaughtyTestListener extends BaseTestListener
             $modifications = $this->evaluateModifications($this->metricsBeforeTest, $currentMetrics);
 
             if (count($modifications) > 0) {
-                $this->printNaughtyTest('Test ' . $test->getName(), $modifications);
+                $this->addNaughtyTest('Test ' . $test->getName(), $modifications);
             }
 
             $this->metricsBeforeTest = $currentMetrics;
@@ -157,15 +166,18 @@ class NaughtyTestListener extends BaseTestListener
      * @param string $name
      * @param array[] $modifications
      */
-    private function printNaughtyTest($name, array $modifications)
+    private function addNaughtyTest($name, array $modifications)
     {
         $metricFetcherClassWithNamespace = get_class($this->metricFetcher);
-        $metricFetcherClass = substr($metricFetcherClassWithNamespace, strrpos($metricFetcherClassWithNamespace, '\\') + 1);
-        echo PHP_EOL . "$name is naughty (as per $metricFetcherClass)!";
+        $metricFetcherClass = substr(
+            $metricFetcherClassWithNamespace,
+            strrpos($metricFetcherClassWithNamespace, '\\') + 1
+        );
+        $message = "$name is naughty (as per $metricFetcherClass)!";
         foreach ($modifications as $metric => $diffString) {
-            echo PHP_EOL . " - $metric: $diffString";
+            $message .= PHP_EOL . " - $metric: $diffString";
         }
-        echo PHP_EOL;
+        $this->messages[] = $message.PHP_EOL;
     }
 
     /**
@@ -224,7 +236,9 @@ class NaughtyTestListener extends BaseTestListener
                     $diffNum = $currentValue - $previousValue;
                     $diffString = sprintf(' (%s%d)', $diffNum > 0 ? '+' : '-', abs($diffNum));
                 }
-                $modifications[$metric] = $this->formatValue($previousValue) . ' -> ' . $this->formatValue($currentValue) . $diffString;
+                $modifications[$metric] = $this->formatValue($previousValue) . ' -> ' . $this->formatValue(
+                        $currentValue
+                    ) . $diffString;
             }
         }
 
