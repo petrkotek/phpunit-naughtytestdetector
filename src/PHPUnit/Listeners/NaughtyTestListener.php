@@ -3,10 +3,10 @@ namespace PetrKotek\NaughtyTestDetector\PHPUnit\Listeners;
 
 use Exception;
 use PetrKotek\NaughtyTestDetector\MetricFetcher;
-use PHPUnit_Framework_BaseTestListener as BaseTestListener;
-use PHPUnit_Framework_Test as Test;
-use PHPUnit_Framework_TestCase as TestCase;
-use PHPUnit_Framework_TestSuite as TestSuite;
+use PHPUnit\Framework\BaseTestListener;
+use PHPUnit\Framework\Test;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestSuite;
 
 /**
  * NaughtyTestListener is PHPUnit TestListener, which identifies tests, which don't clean up after themselves.
