@@ -86,6 +86,8 @@ class MyMetricFetcher implements MetricFetcher
 
 ```
 
+Tip: You can also use built-in metric fetcher, e.g. `PetrKotek\NaughtyTestDetector\MetricFetchers\GlobalsMetricFetcher`.
+
 #### 3. Run your test suite.
 
 E.g. `phpunit --configuration integration.xml`
