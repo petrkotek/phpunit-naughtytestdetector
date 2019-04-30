@@ -2,10 +2,10 @@
 namespace PetrKotek\NaughtyTestDetector\Tests\PHPUnit\Listeners;
 
 use PetrKotek\NaughtyTestDetector\PHPUnit\Listeners\NaughtyTestListener;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestListener;
 use PHPUnit\Framework\TestSuite;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 class NaughtyTestListenerTest extends TestCase
 {
