@@ -3,16 +3,18 @@ namespace PetrKotek\NaughtyTestDetector\PHPUnit\Listeners;
 
 use Exception;
 use PetrKotek\NaughtyTestDetector\MetricFetcher;
-use PHPUnit\Framework\BaseTestListener;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
 use PHPUnit\Framework\TestSuite;
 
 /**
  * NaughtyTestListener is PHPUnit TestListener, which identifies tests, which don't clean up after themselves.
  */
-class NaughtyTestListener extends BaseTestListener
+class NaughtyTestListener implements TestListener
 {
+    use TestListenerDefaultImplementation;
     /** @var string Config key enabling execution of MetricFetcher on test-level (bool) */
     const CONFIG_KEY_LEVEL_TEST = 'executeOnTestLevel';
 
@@ -78,7 +80,7 @@ class NaughtyTestListener extends BaseTestListener
     /**
      * @param TestSuite $suite
      */
-    public function startTestSuite(TestSuite $suite)
+    public function startTestSuite(TestSuite $suite): void
     {
         if ($this->testSuiteCounter === 0 &&
             ($this->isLevelEnabled(self::CONFIG_KEY_LEVEL_SUITE) || $this->isLevelEnabled(
@@ -97,7 +99,7 @@ class NaughtyTestListener extends BaseTestListener
     /**
      * @param TestSuite $suite
      */
-    public function endTestSuite(TestSuite $suite)
+    public function endTestSuite(TestSuite $suite): void
     {
         $this->testSuiteCounter--;
         $currentMetrics = $this->isLevelEnabled(self::CONFIG_KEY_LEVEL_TEST) ? $this->metricsBeforeTest : null;
@@ -133,7 +135,7 @@ class NaughtyTestListener extends BaseTestListener
     /**
      * @param Test $test
      */
-    public function startTest(Test $test)
+    public function startTest(Test $test): void
     {
         if ($this->metricsBeforeTest === null && $this->isLevelEnabled(self::CONFIG_KEY_LEVEL_TEST)) {
             $this->metricsBeforeTest = $this->fetchMetrics();
@@ -144,7 +146,7 @@ class NaughtyTestListener extends BaseTestListener
      * @param Test $test
      * @param float $time
      */
-    public function endTest(Test $test, $time)
+    public function endTest(Test $test, float $time): void
     {
         if (!($test instanceof TestCase)) {
             return;
