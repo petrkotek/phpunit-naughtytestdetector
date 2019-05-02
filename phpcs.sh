@@ -4,7 +4,7 @@ export PHP_CS_FIXER=~/.composer/vendor/bin/php-cs-fixer
 
 if ! [ -x "$(command -v ${PHP_CS_FIXER})" ]; then
     echo 'Command `php-cs-fixer` not found. Installing...'
-    composer global require friendsofphp/php-cs-fixer
+    composer global require friendsofphp/php-cs-fixer:^2.4
 fi
 
 ${PHP_CS_FIXER} fix $@ .
