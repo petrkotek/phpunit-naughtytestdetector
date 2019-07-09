@@ -205,10 +205,14 @@ class NaughtyTestListener implements TestListener
             try {
                 $encoded = json_encode($value, true);
                 if (json_last_error() !== 0) {
-                    $encoded = sprintf('Object<%s>', get_class($value));
+                    throw new \Exception(json_last_error_msg());
                 }
             } catch (Exception $exception) {
-                $encoded = sprintf('Object<%s>', get_class($value));
+                if (is_object($value)) {
+                    $encoded = sprintf('Object<%s>', get_class($value));
+                } else {
+                    $encoded = gettype($value);
+                }
             }
         }
 
